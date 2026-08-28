@@ -1,0 +1,723 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Hussam Ayash] — طالب علوم وشغوف بالبرمجة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2B41;
+    --parchment:#F3ECDD;
+    --parchment-dark:#E7DDC7;
+    --brass:#A9812F;
+    --brass-light:#C9A45C;
+    --charcoal:#2B2620;
+    --burgundy:#6B2737;
+    --line: rgba(28,43,65,0.16);
+    --shadow: 0 10px 30px rgba(28,43,65,0.08);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--parchment);
+    color: var(--charcoal);
+    font-family: 'Tajawal', sans-serif;
+    line-height: 1.8;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* subtle paper grain */
+  body::before{
+    content:"";
+    position: fixed;
+    inset:0;
+    pointer-events:none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .display{ font-family:'Amiri', serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; unicode-bidi: isolate; }
+
+  a{ color: inherit; text-decoration: none; }
+
+  .wrap{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hairline{
+    height: 1px;
+    background: var(--line);
+    border:0;
+    margin: 0;
+  }
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position: sticky;
+    top:0;
+    z-index: 50;
+    background: rgba(243,236,221,0.86);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    padding: 18px 0;
+  }
+  .brand{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size: 1.25rem;
+    color: var(--ink);
+    letter-spacing: 0.3px;
+  }
+  .brand span{ color: var(--brass); }
+  nav.links{ display:flex; gap: 34px; }
+  nav.links a{
+    font-size: 0.92rem;
+    color: var(--ink);
+    position: relative;
+    padding: 4px 0;
+    transition: color .25s ease;
+  }
+  nav.links a::after{
+    content:"";
+    position:absolute;
+    right:0; left:0; bottom:-2px;
+    height:1px;
+    background: var(--brass);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+  }
+  nav.links a:hover{ color: var(--brass); }
+  nav.links a:hover::after{ transform: scaleX(1); }
+  .nav-toggle{ display:none; background:none; border:1px solid var(--line); border-radius:6px; padding:8px 12px; font-family:'Tajawal'; color:var(--ink); }
+
+  /* ---------- HERO / title page ---------- */
+  .hero{
+    min-height: 92vh;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position: relative;
+    padding: 80px 24px 60px;
+  }
+  .hero-frame{
+    position:absolute;
+    inset: 28px;
+    border: 1px solid var(--line);
+    pointer-events:none;
+  }
+  .hero-frame::before, .hero-frame::after{
+    content:"";
+    position:absolute;
+    width:26px; height:26px;
+    border: 1.5px solid var(--brass);
+  }
+  .hero-frame::before{ top:-1px; right:-1px; border-left:0; border-bottom:0; }
+  .hero-frame::after{ bottom:-1px; left:-1px; border-right:0; border-top:0; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    direction: rtl;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: var(--brass);
+    text-transform: uppercase;
+    margin-bottom: 26px;
+    opacity:0;
+    animation: rise .9s ease forwards .15s;
+  }
+  .eyebrow::before, .eyebrow::after{ content:"—"; margin: 0 10px; color: var(--brass-light); }
+
+  h1.hero-title{
+    font-family:'Amiri', serif;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    color: var(--ink);
+    margin: 0 0 20px;
+    line-height:1.15;
+    opacity:0;
+    animation: rise 1s ease forwards .35s;
+  }
+  .hero-sub{
+    font-style: italic;
+    font-family:'Amiri', serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--charcoal);
+    max-width: 620px;
+    margin: 0 0 34px;
+    opacity:0;
+    animation: rise 1s ease forwards .55s;
+  }
+  .hero-rule{
+    width: 120px;
+    height: 2px;
+    background: var(--brass);
+    margin: 0 0 34px;
+    opacity:0;
+    animation: growline .9s ease forwards .8s;
+    transform-origin: center;
+  }
+  .hero-actions{
+    display:flex;
+    gap:18px;
+    opacity:0;
+    animation: rise 1s ease forwards 1s;
+  }
+  .btn{
+    padding: 13px 30px;
+    border-radius: 2px;
+    font-size: 0.95rem;
+    border: 1px solid var(--ink);
+    transition: all .3s ease;
+  }
+  .btn.primary{ background: var(--ink); color: var(--parchment); }
+  .btn.primary:hover{ background: var(--brass); border-color: var(--brass); }
+  .btn.ghost{ color: var(--ink); }
+  .btn.ghost:hover{ background: var(--ink); color: var(--parchment); }
+
+  .scroll-cue{
+    position:absolute;
+    bottom: 40px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink);
+    opacity: 0.55;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .scroll-cue .stick{ width:1px; height: 34px; background: var(--ink); animation: pulse 2s ease-in-out infinite; }
+
+  @keyframes rise{ from{ opacity:0; transform: translateY(18px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes growline{ from{opacity:0; transform: scaleX(0);} to{opacity:1; transform:scaleX(1);} }
+  @keyframes pulse{ 0%,100%{opacity:.25;} 50%{opacity:.9;} }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding: 120px 0; position: relative; }
+  .section-head{
+    display:flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--brass);
+    font-size: 0.85rem;
+  }
+  .section-title{
+    font-family:'Amiri', serif;
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    color: var(--ink);
+    font-weight: 700;
+    margin:0;
+  }
+  .section-title small{
+    display:block;
+    font-family:'Tajawal';
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--brass);
+    margin-top: 6px;
+    letter-spacing: .5px;
+  }
+
+  .reveal{ opacity:0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap: 60px;
+    align-items:start;
+  }
+  .monogram{
+    width: 180px; height: 180px;
+    border: 1px solid var(--brass);
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Amiri', serif;
+    font-size: 3.2rem;
+    color: var(--ink);
+    position: relative;
+  }
+  .monogram::before{
+    content:"";
+    position:absolute; inset: 12px;
+    border: 1px solid var(--line);
+    border-radius:50%;
+  }
+  .about-text p{ font-size: 1.05rem; color: var(--charcoal); margin: 0 0 20px; }
+  .about-text p:first-of-type::first-letter{
+    font-family:'Amiri', serif;
+    font-size: 3.4rem;
+    color: var(--brass);
+    float:right;
+    line-height: 0.7;
+    padding: 6px 0 0 10px;
+    font-weight: 700;
+  }
+  .about-stats{
+    display:flex;
+    gap: 40px;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .stat b{
+    display:block;
+    font-family:'Amiri', serif;
+    font-size: 1.9rem;
+    color: var(--ink);
+  }
+  .stat span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--brass);
+    letter-spacing: 1px;
+  }
+
+  /* ---------- GLOSSARY / SKILLS ---------- */
+  .glossary{ border-top: 1px solid var(--line); }
+  .t erm-row{
+    display:grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding-right .3s ease;
+  }
+  .term-row:hover{ padding-right: 12px; }
+  .term-row dt{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size: 1.25rem;
+    color: var(--ink);
+  }
+  .term-row dt .mono{ display:block; font-size:0.68rem; color:var(--brass); margin-top:6px; letter-spacing:1px;}
+  .term-row dd{ margin:0; color: var(--charcoal); font-size: 0.98rem; max-width: 620px; }
+
+  /* ---------- PORTFOLIO / INDEX CARDS ---------- */
+  .filter-row{
+    display:flex; gap: 10px; margin-bottom: 46px; flex-wrap: wrap;
+  }
+  .filter-row button{
+    font-family:'IBM Plex Mono', monospace;
+    direction: rtl;
+    font-size: 0.76rem;
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    border-radius: 20px;
+    cursor:pointer;
+    transition: all .25s ease;
+  }
+  .filter-row button.active, .filter-row button:hover{
+    background: var(--ink); color: var(--parchment); border-color: var(--ink);
+  }
+
+  .cards-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .card{
+    background: var(--parchment);
+    border: 1px solid var(--line);
+    padding: 28px 24px 24px;
+    position: relative;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  }
+  .card::before, .card::after{
+    content:"";
+    position:absolute;
+    width:14px; height:14px;
+    border-color: var(--brass);
+    border-style: solid;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .card::before{ top:6px; right:6px; border-width: 1.5px 1.5px 0 0; }
+  .card::after{ bottom:6px; left:6px; border-width: 0 0 1.5px 1.5px; }
+  .card:hover{ transform: translateY(-6px); box-shadow: var(--shadow); border-color: transparent; }
+  .card:hover::before, .card:hover::after{ opacity:1; }
+
+  .card-cat{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--brass);
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    display:block;
+  }
+  .card h3{
+    font-family:'Amiri', serif;
+    font-size: 1.28rem;
+    color: var(--ink);
+    margin: 0 0 12px;
+    line-height:1.4;
+  }
+  .card p{
+    font-size: 0.92rem;
+    color: var(--charcoal);
+    margin: 0 0 20px;
+    opacity: 0.85;
+  }
+  .card-meta{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink);
+    opacity:0.6;
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process{ background: var(--parchment-dark); }
+  .steps{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .steps::before{
+    content:"";
+    position:absolute;
+    top: 26px; right: 12%; left: 12%;
+    height: 1px;
+    background: var(--line);
+  }
+  .step{ text-align:center; padding: 0 18px; position:relative; }
+  .step-num{
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--parchment);
+    border: 1px solid var(--brass);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Amiri', serif;
+    font-weight:700;
+    color: var(--brass);
+    margin: 0 auto 22px;
+    position:relative; z-index:2;
+  }
+  .step h4{ font-family:'Amiri', serif; font-size: 1.15rem; color: var(--ink); margin: 0 0 10px; }
+  .step p{ font-size: 0.88rem; color: var(--charcoal); opacity:0.8; margin:0; }
+
+  /* ---------- TESTIMONIALS / MARGINALIA ---------- */
+  .quotes{ display:grid; grid-template-columns: repeat(3,1fr); gap: 30px; }
+  .quote-card{
+    position: relative;
+    padding: 32px 26px 26px;
+    border-right: 2px solid var(--brass);
+  }
+  .quote-mark{
+    font-family:'Amiri', serif;
+    font-size: 3.5rem;
+    color: var(--brass-light);
+    line-height: 0.5;
+    display:block;
+    margin-bottom: 14px;
+  }
+  .quote-card p{ font-size: 0.98rem; color: var(--charcoal); margin: 0 0 18px; font-style: italic; }
+  .quote-who{ font-family:'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--ink); opacity: 0.65; }
+
+  /* ---------- CONTACT / COLOPHON ---------- */
+  footer.colophon{
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 100px 0 40px;
+  }
+  .colophon .wrap{ text-align:center; }
+  .colophon-title{
+    font-family:'Amiri', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    margin: 0 0 18px;
+  }
+  .colophon p.lead{ opacity:0.8; max-width: 520px; margin: 0 auto 36px; }
+  .contact-mail{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    direction: ltr;
+    font-size: 1.15rem;
+    color: var(--brass-light);
+    border-bottom: 1px solid var(--brass-light);
+    padding-bottom: 6px;
+    margin-bottom: 50px;
+    transition: color .25s ease, border-color .25s ease;
+  }
+  .contact-mail:hover{ color: var(--parchment); border-color: var(--parchment); }
+  .colophon-links{
+    display:flex; justify-content:center; gap: 30px;
+    margin-bottom: 50px;
+    font-size: 0.9rem;
+  }
+  .colophon-links a{ opacity:0.75; transition: opacity .25s ease; }
+  .colophon-links a:hover{ opacity:1; }
+  .colophon-note{
+    border-top: 1px solid rgba(243,236,221,0.15);
+    padding-top: 26px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    opacity: 0.45;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 880px){
+    nav.links{ display:none; }
+    .about-grid{ grid-template-columns: 1fr; }
+    .monogram{ margin: 0 auto; }
+    .cards-grid{ grid-template-columns: 1fr; }
+    .steps{ grid-template-columns: 1fr 1fr; gap: 40px 0; }
+    .steps::before{ display:none; }
+    .quotes{ grid-template-columns: 1fr; }
+    .term-row{ grid-template-columns: 1fr; gap:10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  :focus-visible{ outline: 2px solid var(--brass); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav-inner">
+    <div class="brand">حسام عياش<span>.</span></div>
+    <nav class="links">
+      <a href="#about">نبذة</a>
+      <a href="#glossary">المهارات</a>
+      <a href="#work">الإنجازات</a>
+      <a href="#process">منهجي</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-frame"></div>
+  <div class="eyebrow">طالب  شغوف بالبرمجة</div>
+  <h1 class="hero-title">من الفضول إلى حلٍّ<br>يُكتب بالكود</h1>
+  <p class="hero-sub">أؤمن أن التفكير التحليلي وحل المشكلات هما جوهر البرمجة، وأسعى لتوظيفهما في بناء مشاريع ذات أثر حقيقي.</p>
+  <div class="hero-rule"></div>
+  <div class="hero-actions">
+    <a href="#work" class="btn primary">إنجازاتي</a>
+    <a href="#contact" class="btn ghost">راسلني</a>
+  </div>
+  <div class="scroll-cue"><span>مرر للأسفل</span><span class="stick"></span></div>
+</section>
+
+<hr class="hairline">
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="section-num mono">01</span>
+      <h2 class="section-title">نبذة عني<small>Biography</small></h2>
+    </div>
+    <div class="about-grid">
+      <div class="monogram">؟</div>
+      <div class="about-text">
+        <p></p>
+        <p>شاركت في مجموعة من المسابقات العلمية والتقنية على المستوى الجماعي والفردي، وهي تجارب منحتني خبرة عملية قيّمة وساعدتني على تطوير التفكير المنطقي والعمل الجماعي ضمن بيئة تنافسية. إلى جانب ذلك، أمتلك خبرة في كتابة المقالات عزّزت قدرتي على التعبير عن الأفكار التقنية بوضوح وتنظيم.</p>
+        <div class="about-stats">
+          <div class="stat"><b>٤</b><span class="mono">مسابقات علمية وتقنية</span></div>
+          <div class="stat"><b>٢</b><span class="mono">مجالا اهتمام: برمجة وكتابة</span></div>
+          <div class="stat"><b>١</b><span class="mono">هدف: الاحتراف في التطوير</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="glossary" class="glossary">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="section-num mono">02</span>
+      <h2 class="section-title">مسرد المهارات<small>Areas of Expertise</small></h2>
+    </div>
+    <dl>
+      <div class="term-row">
+        <dt>حل المشكلات<span class="mono">Problem Solving</span></dt>
+        <dd>تفكيك المسائل البرمجية المعقّدة إلى خطوات منطقية قابلة للتنفيذ، اكتسبتها عبر المشاركة في مسابقات البرمجة التنافسية.</dd>
+      </div>
+      <div class="term-row">
+        <dt>التفكير التحليلي<span class="mono">Analytical Thinking</span></dt>
+        <dd>تحليل المعطيات واختيار النهج الأنسب للحل، ضمن بيئات تنافسية تتطلب سرعة ودقة في اتخاذ القرار.</dd>
+      </div>
+      <div class="term-row">
+        <dt>العمل الجماعي<span class="mono">Teamwork</span></dt>
+        <dd>التعاون ضمن فرق برمجية في أولمبياد ومسابقات جماعية، وتوزيع المهام تحت ضغط الوقت.</dd>
+      </div>
+      <div class="term-row">
+        <dt>الكتابة التقنية<span class="mono">Technical Writing</span></dt>
+        <dd>التعبير عن الأفكار التقنية بوضوح وتنظيم من خلال خبرة في كتابة المقالات.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="section-num mono">03</span>
+      <h2 class="section-title">الإنجازات والمسابقات<small>Competitions &amp; Achievements</small></h2>
+    </div>
+
+    <div class="filter-row" id="filters">
+      <button class="active" data-filter="all">الكل</button>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+      <article class="card" data-cat="prog">
+        <span class="card-cat mono">PROG · MARATHON</span>
+        <h3>KPM Programming Marathon for Youth</h3>
+        <p>مشاركة في ماراثون برمجي تنافسي، ركّز على حل المسائل البرمجية ضمن وقت محدد وبيئة ضغط عالية.</p>
+        <div class="card-meta"><span>مسابقة فردية</span><span>برمجة تنافسية</span></div>
+      </article>
+      <article class="card" data-cat="prog">
+        <span class="card-cat mono">PROG · TEAM</span>
+        <h3>IIOT Informatics Olympiad for Teams</h3>
+        <p>مشاركة ضمن فريق في أولمبياد معلوماتية جماعي، تطلّب توزيع المهام والتنسيق لحل مسائل برمجية معقّدة.</p>
+        <div class="card-meta"><span>عمل جماعي</span><span>أولمبياد معلوماتية</span></div>
+      </article>
+      <article class="card" data-cat="prog">
+        <span class="card-cat mono">PROG · CONTEST</span>
+        <h3>SCPC Teens Programming Contest</h3>
+        <p>مشاركة في مسابقة برمجية موجّهة للشباب، ركّزت على تطبيق مهارات التفكير المنطقي وحل المشكلات بسرعة.</p>
+        <div class="card-meta"><span>عمل جماعي</span><span>برمجة تنافسية</span></div>
+      </article>
+      <article class="card" data-cat="sci">
+        <span class="card-cat mono">SCI · ASTRO</span>
+        <h3>IAAC Astronomy and Astrophysics Competition</h3>
+        <p>مشاركة في مسابقة علمية في مجال الفلك والفيزياء الفلكية، وسّعت فضولي العلمي خارج نطاق البرمجة.</p>
+        <div class="card-meta"><span>مسابقة علمية</span><span>فلك وفيزياء فلكية</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="process" class="process">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="section-num mono">04</span>
+      <h2 class="section-title">منهجي في حل المشكلات<small>My Approach</small></h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <h4>فهم المشكلة</h4>
+        <p>تحليل المطلوب بدقة وتحديد المعطيات والقيود قبل التفكير في أي حل.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <h4>تصميم الحل</h4>
+        <p>بناء خطة منطقية وخوارزمية واضحة تناسب طبيعة المسألة.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <h4>التنفيذ</h4>
+        <p>ترجمة الحل إلى كود منظّم وقابل للقراءة والتطوير.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <h4>الاختبار والتحسين</h4>
+        <p>تجربة الحل على حالات متعددة وتحسين الأداء والدقة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="section-num mono">05</span>
+      <h2 class="section-title">أهدافي القادمة<small>Where I'm Headed</small></h2>
+    </div>
+    <div class="quotes">
+      <div class="quote-card">
+        <span class="quote-mark">◆</span>
+        <p>بناء مسار مهني قوي في مجال تطوير البرمجيات، والوصول إلى مستوى احترافي في هذا المجال.</p>
+        <div class="quote-who mono">مسار مهني</div>
+      </div>
+      <div class="quote-card">
+        <span class="quote-mark">◆</span>
+        <p>العمل على مشاريع ذات أثر حقيقي تساهم في حل مشكلات واقعية يواجهها الناس.</p>
+        <div class="quote-who mono">أثر حقيقي</div>
+      </div>
+      <div class="quote-card">
+        <span class="quote-mark">◆</span>
+        <p>الاستمرار في التعلّم وتطوير المهارات باستمرار، دون توقف عند مستوى معيّن.</p>
+        <div class="quote-who mono">تعلّم مستمر</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="colophon" id="contact">
+  <div class="wrap">
+    <h2 class="colophon-title">لنبنِ شيئًا يستحق الحل</h2>
+    <p class="lead">مهتم بفرص تدريب، مشاريع طلابية يسعدني التواصل.</p>
+    <a href="mailto:your.email@example.com" class="contact-mail">hussamayash96@gmail.com</a>
+    <div class="colophon-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">GitHub</a>
+      <a href="#">Twitter / X</a>
+    </div>
+    <div class="colophon-note mono">designed &amp; set in Amiri / Tajawal — © 2026</div>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el=> io.observe(el));
+
+  // portfolio filter
+  const filterBtns = document.querySelectorAll('#filters button');
+  const cards = document.querySelectorAll('#cardsGrid .card');
+  filterBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      filterBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(c=>{
+        const show = (f === 'all' || c.dataset.cat === f);
+        c.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
